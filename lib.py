@@ -3,7 +3,9 @@ import win32print
 import time
 isPrinting = False
 PrinterList = []
+
 class lib():
+
     def __init__(self,level):
         self.level = level
     def print_menu(self):
@@ -36,10 +38,27 @@ class lib():
         print("choice one")
         userinput=int(input("|--> "))
         return userinput
-    def PrintAndChoicePrinters(self,numberOfPrinters):
-        printers=win32print.EnumPrinters(2)
-        for i in range(len(printers)):
-            print(printers[i][1])
-            PrinterList.append(printers[i][1])
-        print(PrinterList)
-        
+    def PrintAndChoicePrinters(self,numberOfPrinters:int):
+        while True:
+            print("------------------------------------------------------------------------------------")
+            printers=win32print.EnumPrinters(numberOfPrinters)
+            PrinterList=[i[1] for i in printers]
+            # print(PrinterList)
+            for i,element in enumerate(PrinterList):
+                print('{}. {}'.format(i+1,element))
+            userinputofnumber=input('이중에서 하나를 고르시오')
+
+
+            if(userinputofnumber.isdigit()):
+                target=PrinterList[int(userinputofnumber)-1]
+                return target
+            else:
+                print("다시 입력하시오")
+            
+
+
+    def PrintFile(self,filename:str,target:str):
+        win32api.ShellExecute(0, 'print', filename,
+                    f'/d:"{target}"', '.', 0)
+
+            
